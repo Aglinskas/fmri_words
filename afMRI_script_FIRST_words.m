@@ -17,7 +17,6 @@ debug_mode = 0;
 TR = 2.5;
 %% load random pics for the experiment
 myTrials = func_GetMyTrials; %getTrials
-
 if debug_mode
   time_to_respond = 0.1;
     instruct_time = 5; %time in seconds that instructions are on the screen (if not self paced)  

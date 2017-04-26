@@ -14,7 +14,7 @@ subjID = 'S99'
 load(subjID)
 c_expBlock = expBlock
 when_to_stop = expBlock + 16
-%% PsychDefaultSetup(2);
+%% PTB CODE
 screens = Screen('Screens');
 screenNumber = max(screens); % Draw to the external screen if avaliable
 white = WhiteIndex(screenNumber);

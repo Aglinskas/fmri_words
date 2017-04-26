@@ -76,8 +76,9 @@ temp.line_width_ins = (temp.textbounds_i(4) - temp.textbounds_i(2)) / temp.n_lin
 
 DrawFormattedText(ptb.window,temp.task_Instruct,'centerblock',ptb.yCenter + temp.line_width_ins*temp.n_lines_nm + temp.line_width_ins);
 
+GetSecs / 2.5
 
-[x t_presented] = Screen('flip',ptb.window,ceil(GetSecs / 2.5) * 2.5);
+[x t_presented] = Screen('flip',ptb.window);
 
 while GetSecs < t_presented + opts.instruct_time
     %do nothing
@@ -155,3 +156,4 @@ if ismember(this_block,when_to_stop);
     break
 end % ends if end-of-run
 end % ends fmri blocks
+%%
