@@ -67,12 +67,12 @@ Task{3,1} = 'Quanto amichevole?';
 Task{3,2} = '1 = Moltissimo\n2 = Molto\n3 = Poco\n4 = Pochissimo';
 Task{4,1} = 'Quanto affidabile?';
 Task{4,2} = '1 = Moltissimo\n2 = Molto\n3 = Poco\n4 = Pochissimo';
-% Task{6,1} = 'Emozioni positive?';
-% Task{6,2} = '1 = Moltissimo\n2 = Molto\n3 = Poco\n4 = Pochissimo';
+                % Task{6,1} = 'Emozioni positive?';
+                % Task{6,2} = '1 = Moltissimo\n2 = Molto\n3 = Poco\n4 = Pochissimo';
 Task{5,1} = 'Quanto familiare?'; % semantic access 1
 Task{5,2} = '1 = Moltissimo\n2 = Molto\n3 = Poco\n4 = Pochissimo';
-% Task{8,1} = 'Quanto scriveresti?';%semantic access 2
-% Task{8,2} = '1 = Moltissimo\n2 = Molto\n3 = Poco\n4 = Pochissimo';
+                % Task{8,1} = 'Quanto scriveresti?';%semantic access 2
+                % Task{8,2} = '1 = Moltissimo\n2 = Molto\n3 = Poco\n4 = Pochissimo';
 Task{6,1} = 'Nome comune?';
 Task{6,2} = '1 = Moltissimo\n2 = Molto\n3 = Poco\n4 = Pochissimo';
 Task{7,1} = 'Quanti fatti ricordi?';
@@ -81,16 +81,18 @@ Task{8,1} = 'Che lavoro fa?';
 Task{8,2} = '1 = Presentatore TV/attore\n2 = Cantante/Musicista\n3 = Politico/Sportivo\n4 = Altro/Non so';
 Task{9,1} = 'Volto distintivo?';
 Task{9,2} = '1 = Moltissimo\n2 = Molto\n3 = Poco\n4 = Pochissimo';
-Task{10,1} = 'Sicuramente conoscere\n(nome e cognome)?';
+Task{10,1} = 'Cognome comune?';
 Task{10,2} = '1 = Moltissimo\n2 = Molto\n3 = Poco\n4 = Pochissimo';
-% Task{10,1} = 'Quanto integra?';
+% Task{10,1} = 'Sicuramente conoscere\n(nome e cognome)?';
 % Task{10,2} = '1 = Moltissimo\n2 = Molto\n3 = Poco\n4 = Pochissimo';
+                % Task{10,1} = 'Quanto integra?';
+                % Task{10,2} = '1 = Moltissimo\n2 = Molto\n3 = Poco\n4 = Pochissimo';
 Task{11,1} = 'Stesso volto?';
 Task{11,2} = '1 = Volto diverso\n2 = Stesso volto';
 Task{12,1} = 'Stesso volto?';
 Task{12,2} = '1 = Volto diverso\n2 = Stesso volto';
 Task{13,1} = 'Stesso volto?';
-Task{13,2} = '1 = Volto diverso\n2 = Stesso volto';
+Task{13,2} = '1 = Volto diverCso\n2 = Stesso volto';
 Task{14,1} = 'Stesso monumento?'; %control
 Task{14,2} = '1 = Monumento diverso\n2 = Stesso monumento';
 Task{15,1} = 'Stesso monumento?';
@@ -279,13 +281,35 @@ else
 end 
 end % ends the function
 
+%[myTrials.Stim] = deal(myTrials.word)
+for i = 1:length(myTrials)
+    spc_ind = strfind(myTrials(i).word,' ');
+    if isempty(spc_ind)
+        myTrials(i).Stim = myTrials(i).word;
+    else
+    spc_ind = spc_ind(1);
+    myTrials(i).Stim = replaceBetween(myTrials(i).word,myTrials(i).word(1:spc_ind-1),myTrials(i).word(spc_ind+1:end),'\n');
+    end
+end
+
 myTrials(1).StimType = nan;
 m_inds = find(ismember([myTrials.blockNum],[14 15 16]));
 f_inds = find(ismember([myTrials.blockNum],[1:13]));
 [myTrials(m_inds).StimType] = deal(2);
 [myTrials(f_inds).StimType] = deal(1);
 
+myTrials(1).time_presented = [];
+myTrials(1).TR = [];
+myTrials(1).resp = [];
+myTrials(1).RT = [];
 
+%myTrials = func_GetMyTrials;
+
+
+
+
+%sp = cellfun(@(x) length(strfind(x,' ')),{myTrials.word})';
+%{myTrials(find(sp == 3)).word}'
 %source(pres_order(1)).filepaths{1,1}
 %for block_prefill2 = 1 : numBlocks
 %for line_prefill2 = block_prefill2 * numTrials - (numTrials - 1) : block_prefill2 * numTrials;

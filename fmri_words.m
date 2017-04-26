@@ -15,9 +15,9 @@ opts.time_to_respond = 2.5 - opts.StimTime;
 opts.fmriblocks = 80;
 opts.fmriTrials = 8;
 opts.TR = 2.5;
+opts.offset = .1 % how much to take away from response time for nice round TRs 
 % load random pics for the experiment
 myTrials = func_GetMyTrials; %getTrial
-myTrials(1).time_presented = [];
 % Open up Screen 
 sca
 Screen('Preference', 'SkipSyncTests', 1); % disable if script crashes
@@ -35,7 +35,7 @@ end
 % open screen
 [ptb.window, ptb.windowRect] = Screen(ptb.screenNumber, 'openwindow',[128 128 128],ptb.manual_winsize);
 ptb.ifi = Screen('GetFlipInterval', ptb.window);
-[ptb.xCenter, ptb.yCenter] = RectCenter(ptb.windowRect)
+[ptb.xCenter, ptb.yCenter] = RectCenter(ptb.windowRect);
 %Screen('BlendFunction', ptb.window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
         % scanner 
         % Wait for first pulse
@@ -65,9 +65,9 @@ wh_blocks = myTrials(length([myTrials.time_presented])+1).fmriBlock : opts.fmrib
 
 for this_block = wh_blocks;
     
-trial_struct.ins_line = this_block * opts.fmriTrials - opts.fmriTrials + 1; % which line
-    temp.task_Instruct = myTrials(trial_struct.ins_line).taskIntruct;
-    temp.task_Name = myTrials(trial_struct.ins_line).TaskName;
+temp.ins_line = this_block * opts.fmriTrials - opts.fmriTrials + 1; % which line
+    temp.task_Instruct = myTrials(temp.ins_line).taskIntruct;
+    temp.task_Name = myTrials(temp.ins_line).TaskName;
 % Present Task Instructions
 [temp.nx, temp.ny, temp.textbounds_i] = DrawFormattedText(ptb.window,temp.task_Name,'centerblock','center');
 temp.n_lines_nm = length(strfind(temp.task_Name,'\n'))+1;
@@ -75,9 +75,7 @@ temp.n_lines_ins = length(strfind(temp.task_Instruct,'\n'))+1;
 temp.line_width_ins = (temp.textbounds_i(4) - temp.textbounds_i(2)) / temp.n_lines_nm;
 
 DrawFormattedText(ptb.window,temp.task_Instruct,'centerblock',ptb.yCenter + temp.line_width_ins*temp.n_lines_nm + temp.line_width_ins);
-
-
-[x t_presented] = Screen('flip',ptb.window,ceil(GetSecs / 2.5) * 2.5);
+[x t_presented] = Screen('flip',ptb.window);
 
 while GetSecs < t_presented + opts.instruct_time
     %do nothing
@@ -95,17 +93,22 @@ for trial_ind = 1:opts.fmriTrials
 %present name
 l = length([myTrials.time_presented]) + 1;
 DrawFormattedText(ptb.window, myTrials(l).word,'center','center');
-[x t_presented] = Screen('flip',ptb.window);
+
+temp.when_to_flip = ceil((GetSecs-exp.start) / opts.TR) * opts.TR;
+temp.when_to_flip = temp.when_to_flip + exp.start;
+
+[x t_presented] = Screen('flip',ptb.window,temp.when_to_flip);
+
 myTrials(l).time_presented = t_presented - exp.start;
+myTrials(l).TR = myTrials(l).time_presented / 2.5;
 while GetSecs < t_presented + opts.StimTime
     % Wait stim on screen
 end
 
 DrawFormattedText(ptb.window,'+','center','center');
 [x t_presented] = Screen('flip',ptb.window);
-
 keyIsDown = 0;
-while GetSecs < t_presented + opts.time_to_respond
+while GetSecs < t_presented + opts.time_to_respond - opts.offset;
  % wait response time
             % If Scanning
             if scanning == true
@@ -141,8 +144,8 @@ end % Ends wait for response
 end %ends fmri Trials
 
 % if end of run
-when_to_stop = arrayfun(@(x) myTrials(max(find([myTrials.fmriRun] == x))).fmriBlock,unique([myTrials.fmriRun]));
-if ismember(this_block,when_to_stop);
+exp.when_to_stop = arrayfun(@(x) myTrials(max(find([myTrials.fmriRun] == x))).fmriBlock,unique([myTrials.fmriRun]));
+if ismember(this_block,exp.when_to_stop);
     DrawFormattedText(ptb.window,sprintf('End of Run %d/%d',myTrials(l).fmriRun,max([myTrials.fmriRun])),'center','center');
     [x t_presented] = Screen('flip',ptb.window);
    while GetSecs < t_presented + 5
@@ -155,3 +158,5 @@ if ismember(this_block,when_to_stop);
     break
 end % ends if end-of-run
 end % ends fmri blocks
+
+
