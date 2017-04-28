@@ -87,18 +87,25 @@ Task{10,2} = '1 = Moltissimo\n2 = Molto\n3 = Poco\n4 = Pochissimo';
 % Task{10,2} = '1 = Moltissimo\n2 = Molto\n3 = Poco\n4 = Pochissimo';
                 % Task{10,1} = 'Quanto integra?';
                 % Task{10,2} = '1 = Moltissimo\n2 = Molto\n3 = Poco\n4 = Pochissimo';
-Task{11,1} = 'Stesso volto?';
-Task{11,2} = '1 = Volto diverso\n2 = Stesso volto';
-Task{12,1} = 'Stesso volto?';
-Task{12,2} = '1 = Volto diverso\n2 = Stesso volto';
-Task{13,1} = 'Stesso volto?';
-Task{13,2} = '1 = Volto diverCso\n2 = Stesso volto';
-Task{14,1} = 'Stesso monumento?'; %control
-Task{14,2} = '1 = Monumento diverso\n2 = Stesso monumento';
-Task{15,1} = 'Stesso monumento?';
-Task{15,2} = '1 = Monumento diverso\n2 = Stesso monumento';
-Task{16,1} = 'Stesso monumento?';
-Task{16,2} = '1 = Monumento diverso\n2 = Stesso monumento';
+Task{11,1} = 'Stesso nome?';
+Task{11,2} = '1 = nome diverso\n2 = Stesso nome';
+Task{12,1} = 'Stesso nome?';
+Task{12,2} = '1 = nome diverso\n2 = Stesso nome';
+Task{13,1} = 'Stesso nome?';
+Task{13,2} = '1 = nome diverso\n2 = Stesso nome';
+% Task{14,1} = 'Stesso monumento?'; %control
+% Task{14,2} = '1 = Monumento diverso\n2 = Stesso monumento';
+% Task{15,1} = 'Stesso monumento?';
+% Task{15,2} = '1 = Monumento diverso\n2 = Stesso monumento';
+% Task{16,1} = 'Stesso monumento?';
+% Task{16,2} = '1 = Monumento diverso\n2 = Stesso monumento';
+
+Task{14,1} = 'Stesso nome?'; %control
+Task{14,2} = '1 = nome diverso\n2 = Stesso nome';
+Task{15,1} = 'Stesso nome?';
+Task{15,2} = '1 = nome diverso\n2 = Stesso nome';
+Task{16,1} = 'Stesso nome?';
+Task{16,2} = '1 = nome diverso\n2 = Stesso nome';
 %%
 %% Task names and task instructions
 randTask = 1 : 16;

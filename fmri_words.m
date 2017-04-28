@@ -1,6 +1,6 @@
 clear all
 close all;
-cd '/Users/aidasaglinskas/Desktop/fmri_words/'
+%cd '/Users/aidasaglinskas/Desktop/fmri_words/'
 subj_id = 'S99'
 
 if ~exist([subj_id '_wrkspc.mat']) % if first Run, set up (files no exist)
