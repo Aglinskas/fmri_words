@@ -2,7 +2,7 @@ clear all
 close all;
 %cd '/Users/aidasaglinskas/Desktop/fmri_words/'
 subj_id = 'S99'
-
+%delete S99*
 if ~exist([subj_id '_wrkspc.mat']) % if first Run, set up (files no exist)
 scanning = false;
 opts.subjID = subj_id;
@@ -92,7 +92,7 @@ for trial_ind = 1:opts.fmriTrials
 
 %present name
 l = length([myTrials.time_presented]) + 1;
-DrawFormattedText(ptb.window, myTrials(l).word,'center','center');
+DrawFormattedText(ptb.window, myTrials(l).Stim,'center','center');
 
 temp.when_to_flip = ceil((GetSecs-exp.start) / opts.TR) * opts.TR;
 temp.when_to_flip = temp.when_to_flip + exp.start;
