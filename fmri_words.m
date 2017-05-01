@@ -1,8 +1,8 @@
-clear all
-close all;
+clear all; close all;
 %cd '/Users/aidasaglinskas/Desktop/fmri_words/'
-subj_id = 'S99'
+subj_id = 'S98'
 %delete S99*
+%myTrials(length([myTrials.time_presented])).fmriRun
 if ~exist([subj_id '_wrkspc.mat']) % if first Run, set up (files no exist)
 scanning = false;
 opts.subjID = subj_id;
@@ -15,7 +15,7 @@ opts.time_to_respond = 2.5 - opts.StimTime;
 opts.fmriblocks = 80;
 opts.fmriTrials = 8;
 opts.TR = 2.5;
-opts.offset = .1 % how much to take away from response time for nice round TRs 
+opts.offset = .2 % how much to take away from response time for nice round TRs 
 % load random pics for the experiment
 myTrials = func_GetMyTrials; %getTrial
 % Open up Screen 
