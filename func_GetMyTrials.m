@@ -88,11 +88,11 @@ Task{10,2} = '1 = Moltissimo\n2 = Molto\n3 = Poco\n4 = Pochissimo';
                 % Task{10,1} = 'Quanto integra?';
                 % Task{10,2} = '1 = Moltissimo\n2 = Molto\n3 = Poco\n4 = Pochissimo';
 Task{11,1} = 'Stesso nome?';
-Task{11,2} = '1 = nome diverso\n2 = Stesso nome';
+Task{11,2} = '1 = Nome diverso\n2 = Stesso nome';
 Task{12,1} = 'Stesso nome?';
-Task{12,2} = '1 = nome diverso\n2 = Stesso nome';
+Task{12,2} = '1 = Nome diverso\n2 = Stesso nome';
 Task{13,1} = 'Stesso nome?';
-Task{13,2} = '1 = nome diverso\n2 = Stesso nome';
+Task{13,2} = '1 = Nome diverso\n2 = Stesso nome';
 % Task{14,1} = 'Stesso monumento?'; %control
 % Task{14,2} = '1 = Monumento diverso\n2 = Stesso monumento';
 % Task{15,1} = 'Stesso monumento?';
