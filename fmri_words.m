@@ -124,6 +124,11 @@ while GetSecs < t_presented + opts.time_to_respond - opts.offset;
                %myTrials(ExpTrial).RT=RT;
                myTrials(l).resp=response;
                myTrials(l).RT=RT;
+                    % Colour Change
+                    oldTextColor=Screen('TextColor', ptb.window, [0 255 0]);
+                    DrawFormattedText(ptb.window,'+','center','center');
+                    [x temp.colourchange] = Screen('flip',ptb.window);
+                    oldTextColor=Screen('TextColor', ptb.window, [0 0 0])
                     end
                 end
             end
@@ -137,8 +142,6 @@ while GetSecs < t_presented + opts.time_to_respond - opts.offset;
                     myTrials(l).resp = KbName(find(keyCode));
                     myTrials(l).RT = GetSecs - t_presented;
                 end % ends key if down if statement
-                
-                
             end % ends 'if scanning loop'
 end % Ends wait for response
 end %ends fmri Trials

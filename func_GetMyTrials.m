@@ -1,7 +1,4 @@
-%source(1).filepaths{1,1} %surce(i) name counter, filepaths{i,1} picture counter
-%myTrials = source
-
-function myTrials = func_testTrials;
+function myTrials = func_GetMyTrials;
 
 %ISI = 3;
 %time_to_respond = 3.5;
@@ -295,10 +292,10 @@ for i = 1:length(myTrials)
         myTrials(i).Stim = myTrials(i).word;
     else
     spc_ind = spc_ind(1);
-    myTrials(i).Stim = replaceBetween(myTrials(i).word,myTrials(i).word(1:spc_ind-1),myTrials(i).word(spc_ind+1:end),'\n');
+    %myTrials(i).Stim = replaceBetween(myTrials(i).word,myTrials(i).word(1:spc_ind-1),myTrials(i).word(spc_ind+1:end),'\n');
+     myTrials(i).Stim = [myTrials(i).word(1:spc_ind-1) '\n' myTrials(i).word(spc_ind+1:end)];
     end
 end
-
 myTrials(1).StimType = nan;
 m_inds = find(ismember([myTrials.blockNum],[14 15 16]));
 f_inds = find(ismember([myTrials.blockNum],[1:13]));
