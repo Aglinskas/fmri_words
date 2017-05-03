@@ -1,8 +1,9 @@
 clear all; close all;
+addpath('.\strings')
 %cd '/Users/aidasaglinskas/Desktop/fmri_words/'
 subj_id = 'S98'
 %delete S99*
-%myTrials(length([myTrials.time_presented])).fmriRun
+%myTrials(length([my1Trials.time_presented])).fmriRun
 if ~exist([subj_id '_wrkspc.mat']) % if first Run, set up (files no exist)
 scanning = false;
 opts.subjID = subj_id;
@@ -15,12 +16,12 @@ opts.time_to_respond = 2.5 - opts.StimTime;
 opts.fmriblocks = 80;
 opts.fmriTrials = 8;
 opts.TR = 2.5;
-opts.offset = .2 % how much to take away from response time for nice round TRs 
+opts.offset = .1 % how much to take away from response time for nice round TRs 
 % load random pics for the experiment
 myTrials = func_GetMyTrials; %getTrial
 % Open up Screen 
 sca
-Screen('Preference', 'SkipSyncTests', 1); % disable if script crashes
+Screen('Preference', 'SkipSyncTests', 0); % disable if script crashes
 ptb.screens = Screen('Screens');
 ptb.screenNumber = 0;
 ptb.white = WhiteIndex(ptb.screenNumber);
@@ -48,7 +49,7 @@ ptb.ifi = Screen('GetFlipInterval', ptb.window);
             Cfg.responseDevice = 'LUMINASERIAL';
             Cfg.serialPortName = 'COM1'
             Cfg = InitResponseDevice(Cfg); %LUMINA box: ASCII + highest baud rate (115200)
-            DrawFormattedText (window, 'WAITING FOR THE SCANNER','center','center');
+            DrawFormattedText (ptb.window, 'WAITING FOR THE SCANNER','center','center');
             %Screen('flip',window); 
             Screen('flip',ptb.window); 
             ASF_WaitForScannerSynch([], Cfg);
@@ -69,12 +70,13 @@ temp.ins_line = this_block * opts.fmriTrials - opts.fmriTrials + 1; % which line
     temp.task_Instruct = myTrials(temp.ins_line).taskIntruct;
     temp.task_Name = myTrials(temp.ins_line).TaskName;
 % Present Task Instructions
-[temp.nx, temp.ny, temp.textbounds_i] = DrawFormattedText(ptb.window,temp.task_Name,'centerblock','center');
+[temp.nx, temp.ny, temp.textbounds_i] = DrawFormattedText(ptb.window,temp.task_Name,'center','center');
+%[temp.nx, temp.ny, temp.textbounds_i] = DrawFormattedText(ptb.window,temp.task_Name,'centerblock','centerblock');
 temp.n_lines_nm = length(strfind(temp.task_Name,'\n'))+1;
 temp.n_lines_ins = length(strfind(temp.task_Instruct,'\n'))+1;
 temp.line_width_ins = (temp.textbounds_i(4) - temp.textbounds_i(2)) / temp.n_lines_nm;
 
-DrawFormattedText(ptb.window,temp.task_Instruct,'centerblock',ptb.yCenter + temp.line_width_ins*temp.n_lines_nm + temp.line_width_ins);
+DrawFormattedText(ptb.window,temp.task_Instruct,'center',ptb.yCenter + temp.line_width_ins*temp.n_lines_nm + temp.line_width_ins);
 [x t_presented] = Screen('flip',ptb.window);
 
 while GetSecs < t_presented + opts.instruct_time
@@ -108,6 +110,7 @@ end
 DrawFormattedText(ptb.window,'+','center','center');
 [x t_presented] = Screen('flip',ptb.window);
 keyIsDown = 0;
+pressed = 0;
 while GetSecs < t_presented + opts.time_to_respond - opts.offset;
  % wait response time
             % If Scanning
@@ -154,12 +157,9 @@ if ismember(this_block,exp.when_to_stop);
    while GetSecs < t_presented + 5
        %wait
    end
-   
     save([subj_id '_wrkspc.mat']);
     save([subj_id '_myTrials.mat'],'myTrials');
     sca
     break
 end % ends if end-of-run
 end % ends fmri blocks
-
-

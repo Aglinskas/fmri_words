@@ -3,20 +3,12 @@ Screen('Preference', 'SkipSyncTests', 1); % disable if script crashes.
 sca;
 subjID = 'S99'
 
-% save(subjID)
-%     if expBlock == 16
-%         save(subjID)
-%         break
-%     end
-% % %  
-%subjID = datestr(date)
-
 load(subjID)
 c_expBlock = expBlock
 when_to_stop = expBlock + 16
 %% PTB CODE
 screens = Screen('Screens');
-screenNumber = max(screens); % Draw to the external screen if avaliable
+screenNumber = 0%max(screens); % Draw to the external screen if avaliable
 white = WhiteIndex(screenNumber);
 black = BlackIndex(screenNumber);
 grey = white / 2;
@@ -66,23 +58,25 @@ Screen('TextSize', window, 28);
 Screen('TextFont', window, 'Courier');
 DrawFormattedText(window, taskName, 'center', 'center', white);
 % Task instructions
-Screen('TextSize', window, 24);
-Screen('TextFont', window, 'Courier');
-lower_third = 600;
-cCenter = xCenter - length(taskIntruct);
-DrawFormattedText(window, taskIntruct, cCenter, lower_third, white);
+%Screen('TextSize', window, 24);
+%Screen('TextFont', window, 'Courier');
+%lower_third = 600;
+%t_offset = 0;
+%cCenter = xCenter - length(taskIntruct);
+%DrawFormattedText(window, taskIntruct, cCenter, lower_third, white);
 Screen('Flip', window);
 WaitSecs(instruct_time); % length of time that task and instructions are on the screen
-fixCrossDimPix = 40;
+%fixCrossDimPix = 40;
 % Now we set the coordinates (these are all relative to zero we will let
 % the drawing routine center the cross in the cent1er of our monitor for us)
-xCoords = [-fixCrossDimPix fixCrossDimPix 0 0];
-yCoords = [0 0 -fixCrossDimPix fixCrossDimPix];
-allCoords = [xCoords; yCoords];
+%xCoords = [-fixCrossDimPix fixCrossDimPix 0 0];
+%yCoords = [0 0 -fixCrossDimPix fixCrossDimPix];
+%allCoords = [xCoords; yCoords];
 
 % Set the line width for our fixation cross
-lineWidthPix = 4;
-Screen('DrawLines', window, allCoords,lineWidthPix, white, [xCenter e4 - 220]); % change 2350 is the y coord
+%lineWidthPix = 4;
+%Screen('DrawLines', window, allCoords,lineWidthPix, white, [xCenter e4 - 220]); % change 2350 is the y coord
+DrawFormattedText(window, '+', 'center','center', white);
 Screen('Flip', window);
 
 WaitSecs(t_fixCross); %Time that fixation cross is on the screen
@@ -107,23 +101,25 @@ for ExpTrial = expBlock * fmriTrials - (fmriTrials - 1) : expBlock * fmriTrials;
             % end
             % 
             % imageTexture = Screen('MakeTexture', window, theImage);
-
- e1 = xCenter - s2/2;
- e2 = xCenter + s2/2;
- e3 = yCenter - s1/2 - 150;
- e4 = yCenter + s1/2 - 150;
+% 
+%  e1 = xCenter - s2/2;
+%  e2 = xCenter + s2/2;
+%  e3 = yCenter - s1/2 - 150;
+%  e4 = yCenter + s1/2 - 150;
  
             % Screen('DrawTexture', window, imageTexture, [], [e1 e3 e2 e4],0);
-            DrawFormattedText(window, myTrials(ExpTrial).word, 'center', e4 - 220, white);
-lower_third = 600;
+DrawFormattedText(window, myTrials(ExpTrial).Stim, 'center','center', white);
+%lower_third = 600;
 % Flip to the screen
 Screen('Flip', window); % the image is now on the screen
 timePresented = GetSecs - ExpStart;
 t_presented = GetSecs;
 myTrials(ExpTrial).time_presented = timePresented;
+myTrials(ExpTrial).TR = timePresented / 2.5;
 WaitSecs(StimTime);
-Screen('FillRect', window, grey); % screen  is now blanc
-Screen('DrawLines', window, allCoords,lineWidthPix, white, [xCenter e4 - 220]); % fix cross after face
+%Screen('FillRect', window, grey); % screen  is now blanc
+%Screen('DrawLines', window, allCoords,lineWidthPix, white, [xCenter e4 - 220]); % fix cross after face
+DrawFormattedText(window, '+', 'center','center', white);
 Screen('Flip', window); % fix cross on screen waiting for response
 while GetSecs<time_to_respond+t_presented + 0.5
 %% scanner button reposne
@@ -160,4 +156,7 @@ expName = strcat(subjID, {'_Results.mat'});
 wrkspc = strcat(subjID, {'_workspace.mat'});
 save(expName{1,1},'myTrials');
 save(wrkspc{1,1})
+DrawFormattedText(window, 'End of Run', 'center','center', white)
+Screen('Flip', window); % fix cross on screen waiting for response
+WaitSecs(5)
 sca;

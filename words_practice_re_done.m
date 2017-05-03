@@ -1,5 +1,5 @@
 clear;close all;clc
-scanning  = 0;
+scanning  = true;
 myTrials = func_myPracticeTrials(5,1);
 exp.pics_dir = './Pilot_pics/';
 exp.pics_fn_temp = 'Pilot_pics.0%s.jpeg'; %num2str(1,'%.2i')
@@ -9,8 +9,26 @@ exp.stimTime = .5;
 exp.respTime = 2;
 
 key.keys = KbName('Keynames');
-key.spaceKey = find(ismember(key.keys,'space'));
-key.respkeys1234 = find(ismember(key.keys,{'1!' '2@' '3#' '4$'}));
+key.spaceKey = find(strcmp(key.keys,'space'));
+key.respkeys1234 = [find(strcmp(key.keys,'1!'))
+find(strcmp(key.keys,'2@'))
+find(strcmp(key.keys,'3#'))
+find(strcmp(key.keys,'4$'))];
+
+% key.keys = KbName('Keynames');
+% key.spaceKey = find(ismember(key.keys,'space'));
+% key.respkeys1234 = find(ismember(key.keys,{'1!' '2@' '3#' '4$'}));
+
+
+slides.intro = 1:4;
+slides.ready = 5;
+slides.Q_slides = 6:17;
+ptb.screen = 0;
+ptb.win_size = [0 0 640 480];
+[ptb.window,ptb.rect] = Screen('OpenWindow',ptb.screen,[128 128 128],ptb.win_size);
+
+
+
 
 if scanning
             try 
@@ -21,7 +39,7 @@ if scanning
             Cfg.responseDevice = 'LUMINASERIAL';
             Cfg.serialPortName = 'COM1'
             Cfg = InitResponseDevice(Cfg); %LUMINA box: ASCII + highest baud rate (115200)
-            DrawFormattedText (window, 'WAITING FOR THE SCANNER','center','center');
+            DrawFormattedText (ptb.window, 'WAITING FOR THE SCANNER','center','center');
             %Screen('flip',window); 
             Screen('flip',ptb.window); 
             ASF_WaitForScannerSynch([], Cfg);
@@ -33,12 +51,7 @@ if scanning
 end
 ExpStart = firstPulse;
 
-slides.intro = 1:4;
-slides.ready = 5;
-slides.Q_slides = 6:17;
-ptb.screen = 0;
-ptb.win_size = [0 0 640 480];
-[ptb.window,ptb.rect] = Screen('OpenWindow',ptb.screen,[128 128 128],ptb.win_size);
+
 % intro slides
 for i = slides.intro
 trial.sl_ind = i;
@@ -104,6 +117,7 @@ else
     cond = 'GetSecs < trial.time0+exp.respTime';
 end
 keyPressed = 0;
+pressed = 0;
 RestrictKeysForKbCheck(key.respkeys1234)
 while eval(cond);
  % wait response time
@@ -142,7 +156,7 @@ if scanning == true
                     keyPressed = 1;
                     pause(.3)
                 end % ends key if down if statement    
-            end % ends 'if scanning loop'
+            end % ends 'if      canning loop'
                 
 end % Ends wait for response
 if isempty(myTrials(mt_line).resp)

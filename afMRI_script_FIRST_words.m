@@ -1,6 +1,5 @@
 close all;
-% scanning=true;
-scanning= false;
+scanning= false ;
 Screen('Preference', 'SkipSyncTests', 1); % disable if script crashes. 
 sca
 %% parameters
@@ -17,12 +16,6 @@ debug_mode = 0;
 TR = 2.5;
 %% load random pics for the experiment
 myTrials = func_GetMyTrials; %getTrials
-if debug_mode
-  time_to_respond = 0.1;
-    instruct_time = 5; %time in seconds that instructions are on the screen (if not self paced)  
-t_fixCross = 0.1; % time that fixation cross is on the screen
-StimTime = 0.1;
-end
 %% Set up KbCheck and keyboard related things
 enabledKeyes = [30;31;32;33;44];
 responseKeyes = [30;31;32;33];
@@ -49,13 +42,13 @@ ifi = Screen('GetFlipInterval', window);
 [xCenter, yCenter] = RectCenter(windowRect);
 Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
 %% set up corners
-theImageLocation = myTrials(1).filepath; % gets picture from myTrials
-theImage = imread(theImageLocation);
-[s1, s2, s3] = size(theImage);
-e1 = xCenter - s2/2; % right edge of picture
-e2 = xCenter + s2/2; % left edgle of picture
-e3 = yCenter - s1/2 - 150; % top of picture
-e4 = yCenter + s1/2 - 150; % bottom of picture
+%theImageLocation = myTrials(1).filepath; % gets picture from myTrials
+%theImage = imread(theImageLocation);
+%[s1, s2, s3] = size(theImage);
+%e1 = xCenter - s2/2; % right edge of picture
+%e2 = xCenter + s2/2; % left edgle of picture
+%e3 = yCenter - s1/2 - 150; % top of picture
+%e4 = yCenter + s1/2 - 150; % bottom of picture
 %%
 %% scanner 
 % Wait for first pulse
@@ -85,7 +78,6 @@ for expBlock = 1 : fmriblocks
         save(subjID)
         break
     end
-    
    taskName = myTrials(expBlock * fmriTrials - fmriTrials + 1).TaskName;
    taskIntruct = myTrials(expBlock * fmriTrials - fmriTrials + 1).taskIntruct;
 %% 
@@ -93,23 +85,25 @@ Screen('TextSize', window, 28);
 Screen('TextFont', window, 'Courier');
 DrawFormattedText(window, taskName, 'center', 'center', white);
 % Task instructions
-Screen('TextSize', window, 24);
-Screen('TextFont', window, 'Courier');
-lower_third = 600;
-cCenter = xCenter - length(taskIntruct); %change
-DrawFormattedText(window, taskIntruct, cCenter, lower_third, white);
+%Screen('TextSize', window, 24);
+%Screen('TextFont', window, 'Courier');
+%lower_third = 600;
+%t_offset = 0;
+%cCenter = xCenter - length(taskIntruct); %change
+%DrawFormattedText(window, taskIntruct, cCenter, lower_third, white);
 
 Screen('Flip', window);
 
 WaitSecs(instruct_time); % length of time that task and instructions are on the screen
-fixCrossDimPix = 40;
-xCoords = [-fixCrossDimPix fixCrossDimPix 0 0];
-yCoords = [0 0 -fixCrossDimPix fixCrossDimPix];
-allCoords = [xCoords; yCoords];
+%fixCrossDimPix = 40;
+%xCoords = [-fixCrossDimPix fixCrossDimPix 0 0];
+%yCoords = [0 0 -fixCrossDimPix fixCrossDimPix];
+%allCoords = [xCoords; yCoords];
 
 % Set the line width for our fixation cross
-lineWidthPix = 4;
-Screen('DrawLines', window, allCoords,lineWidthPix, white, [xCenter e4 - 220]); % change 2350 is the y coord
+%lineWidthPix = 4;
+%Screen('DrawLines', window, allCoords,lineWidthPix, white, [xCenter e4 - t_offset]); % change 2350 is the y coord
+DrawFormattedText(window, '+', 'center','center', white);
 Screen('Flip', window);
 WaitSecs(t_fixCross); % Time that fixation cross is on the screen
 a_t = ceil((GetSecs - ExpStart)/TR)*TR;
@@ -119,36 +113,24 @@ end
 %% EXPERIMENTAL RUN. 1 loop of code below = 1 trial
 for ExpTrial = expBlock * fmriTrials - (fmriTrials - 1) : expBlock * fmriTrials; % code that matches blocks, trials, and trials per block
     pressed=0;
-          % PICTURE EXP CODE
-                        % theImageLocation = myTrials(ExpTrial).filepath; % gets picture from myTrials
-                        % theImage = imread(theImageLocation);
-                        % [s1, s2, s3] = size(theImage);
-                        % 
-                        % if s1 > screenYpixels || s2 > screenYpixels
-                        %     disp('ERROR! Image is too big to fit on the screen');
-                        %     sca;
-                        %     return;
-                        % end
-
-                        % imageTexture = Screen('MakeTexture', window, theImage);
-  
- e1 = xCenter - s2/2;
- e2 = xCenter + s2/2;
- e3 = yCenter - s1/2 - 150;
- e4 = yCenter + s1/2 - 150;
-                        % Screen('DrawTexture', window, imageTexture, [], [e1 e3 e2 e4],0);
-DrawFormattedText(window, myTrials(ExpTrial).word, 'center', e4 - 220, white);
-lower_third = 600;
-
+%  e1 = xCenter - s2/2;
+%  e2 = xCenter + s2/2;
+%  e3 = yCenter - s1/2 - 150;
+%  e4 = yCenter + s1/2 - 150;
+%                         % Screen('DrawTexture', window, imageTexture, [], [e1 e3 e2 e4],0);
+DrawFormattedText(window, myTrials(ExpTrial).Stim, 'center','center', white);
+%lower_third = 600;
 
 % Flip to the screen
 Screen('Flip', window); % the image is now on the screen
 timePresented = GetSecs - ExpStart;
 t_presented = GetSecs;
 myTrials(ExpTrial).time_presented = timePresented;
+myTrials(ExpTrial).TR = timePresented / 2.5;
 WaitSecs(StimTime);
-Screen('FillRect', window, grey); % screen  is now blanc
-Screen('DrawLines', window, allCoords,lineWidthPix, white, [xCenter e4 - 220]); % fix cross after face
+%Screen('FillRect', window, grey); % screen  is now blanc
+%Screen('DrawLines', window, allCoords,lineWidthPix, white, [xCenter e4 - t_offset]); % fix cross after face
+DrawFormattedText(window, '+', 'center','center', white)
 Screen('Flip', window); % fix cross on screen waiting for response
 while GetSecs<time_to_respond+t_presented + 0.5 %0.5 offset seems important, dunno why tho
 %% scanner button reposne
@@ -163,7 +145,7 @@ RT = GetSecs-t_presented;
                 pressed = 1;
                 response = sbuttons;
    myTrials(ExpTrial).resp=response;
-        myTrials(ExpTrial).RT=RT;
+   myTrials(ExpTrial).RT=RT;
         end
     end
 end 
@@ -182,5 +164,8 @@ end
 expName = strcat(subjID, {'_Results.mat'});
 wrkspc = strcat(subjID, {'_workspace.mat'});
 save(expName{1,1},'myTrials');
-save(wrkspc{1,1})
+save(wrkspc{1,1});
+DrawFormattedText(window, 'End of Run', 'center','center', white)
+Screen('Flip', window); % fix cross on screen waiting for response
+WaitSecs(5)
 sca;
