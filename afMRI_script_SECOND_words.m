@@ -2,7 +2,6 @@ close all;
 Screen('Preference', 'SkipSyncTests', 1); % disable if script crashes. 
 sca;
 subjID = 'S99'
-
 load(subjID)
 c_expBlock = expBlock
 when_to_stop = expBlock + 16
