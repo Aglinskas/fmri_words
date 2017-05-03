@@ -1,8 +1,6 @@
 clear;close all;clc
 scanning  = false;
 commandwindow
-
-subID = 'wS1'
 myTrials = func_myPracticeTrials(5,1);
 exp.pics_dir = './Pilot_pics/';
 exp.pics_fn_temp = 'Pilot_pics.0%s.jpeg'; %num2str(1,'%.2i')
@@ -24,6 +22,9 @@ slides.Q_slides = 6:17;
 ptb.screen = 0;
 ptb.win_size = [0 0 640 480];
 [ptb.window,ptb.rect] = Screen('OpenWindow',ptb.screen,[128 128 128],ptb.win_size);
+
+
+
 
 if scanning
             try 
@@ -174,13 +175,12 @@ temp.txt = 'Great Job! \nNow that you know the instructions\nyou''ll see the que
 DrawFormattedText(ptb.window,temp.txt,'center','center')
 Screen('Flip',ptb.window)
 RestrictKeysForKbCheck(key.spaceKey)
-myTrials1st = myTrials;
 myTrials = func_myPracticeTrials(5,2)
 
 KbWait
-RestrictKeysForKbCheck(key.respkeys1234)
+
 for test_block = unique([myTrials.blockNum]);
-    ttrial.test_block_ind = test_block%test_block;
+    ttrial.test_block_ind = 1%test_block;
     ttrial.mt_inds = find([myTrials.blockNum] == ttrial.test_block_ind);
     
     DrawFormattedText(ptb.window,myTrials(ttrial.mt_inds(1)).TaskName,'center','center')
@@ -189,34 +189,23 @@ for test_block = unique([myTrials.blockNum]);
     DrawFormattedText(ptb.window,'+','center','center')
     Screen('flip',ptb.window)
     WaitSecs(exp.fixCross_time)
-    for test_trial = ttrial.mt_inds
+    
+    for test_trial = ttrial.mt_inds(1)
         DrawFormattedText(ptb.window,myTrials(test_trial).Stim,'center','center')
         Screen('flip',ptb.window)
         WaitSecs(exp.stimTime)
         DrawFormattedText(ptb.window,'+','center','center')
-        [temp.crap ttrial.t0] = Screen('flip',ptb.window)
-        while GetSecs < ttrial.t0 + exp.respTime
-          if scanning
-          else
-             [keyIsDown, secs, keyCode] = KbCheck;
-             if keyIsDown
-                 myTrials(test_trial).resp = KbName(keyCode);
-                 myTrials(test_trial).RT = GetSecs - ttrial.t0;
-             end
-        end
-        end % end response loop
-    end % end block ttials
-end % ends vlock
+        [temp.crap StimulusOnsetTime]Screen('flip',ptb.window)
+        
+        While
+    end
+end
 
 
-temp.txt = 'That''s it, end of practice :)\nGo tell the experimenter how awesome you did!'
-DrawFormattedText(ptb.window,temp.txt,'center','center')
-Screen('Flip',ptb.window)
-RestrictKeysForKbCheck(key.spaceKey)
-KbWait
-sca
 
-save([subID '_practice'])
+
+
+
 
 
 
