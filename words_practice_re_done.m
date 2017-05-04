@@ -1,8 +1,8 @@
 clear;close all;clc
+t_pracStart = GetSecs
 scanning  = false;
 commandwindow
-
-subID = 'wS1'
+subID = 'wS2'
 myTrials = func_myPracticeTrials(5,1);
 exp.pics_dir = './Pilot_pics/';
 exp.pics_fn_temp = 'Pilot_pics.0%s.jpeg'; %num2str(1,'%.2i')
@@ -13,16 +13,21 @@ exp.respTime = 2;
 
 key.keys = KbName('Keynames');
 key.spaceKey = find(strcmp(key.keys,'space'));
-key.respkeys1234 = [find(strcmp(key.keys,'1!'))
-find(strcmp(key.keys,'2@'))
-find(strcmp(key.keys,'3#'))
-find(strcmp(key.keys,'4$'))];
+% key.respkeys1234 = [find(strcmp(key.keys,'1!'))
+% find(strcmp(key.keys,'2@'))
+% find(strcmp(key.keys,'3#'))
+% find(strcmp(key.keys,'4$'))];
+
+key.respkeys1234 = [find(strcmp(key.keys,'a'))
+find(strcmp(key.keys,'z'))
+find(strcmp(key.keys,'m'))
+find(strcmp(key.keys,'k'))];
 
 slides.intro = 1:4;
 slides.ready = 5;
 slides.Q_slides = 6:17;
 ptb.screen = 0;
-ptb.win_size = [0 0 640 480];
+ptb.win_size = [0 0 1280 800];%[0 0 640 480];
 [ptb.window,ptb.rect] = Screen('OpenWindow',ptb.screen,[128 128 128],ptb.win_size);
 
 if scanning
@@ -168,8 +173,7 @@ end %ends mt_lines
 end % ends first half of the practice;
 
 
-[ptb.window,ptb.rect] = Screen('OpenWindow',ptb.screen,[128 128 128],ptb.win_size);
-
+%[ptb.window,ptb.rect] = Screen('OpenWindow',ptb.screen,[128 128 128],ptb.win_size);
 temp.txt = 'Great Job! \nNow that you know the instructions\nyou''ll see the questions again in randomised order\nThe same as you will in the experiment\n\n(Press Space Key To Continue)';
 DrawFormattedText(ptb.window,temp.txt,'center','center')
 Screen('Flip',ptb.window)
@@ -216,7 +220,5 @@ RestrictKeysForKbCheck(key.spaceKey)
 KbWait
 sca
 
+pracTime = (GetSecs - t_pracStart) / 60;
 save([subID '_practice'])
-
-
-
