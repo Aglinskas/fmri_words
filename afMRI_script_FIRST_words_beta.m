@@ -130,19 +130,23 @@ myTrials(ExpTrial).TR = timePresented / 2.5;
 WaitSecs(StimTime);
 %Screen('FillRect', window, grey); % screen  is now blanc
 %Screen('DrawLines', window, allCoords,lineWidthPix, white, [xCenter e4 - t_offset]); % fix cross after face
-DrawFormattedText(window, '+', 'center','center', white)
-[crap r_ons] = Screen('Flip', window); % fix cross on screen waiting for response
+DrawFormattedText(window, '+', 'center','center', white);
+Screen('Flip', window); % fix cross on screen waiting for response
+r_ons = GetSecs;
 while GetSecs<time_to_respond+r_ons %0.5 offset seems important, dunno why tho
 %% scanner button reposne
 % in a while loop when you want to collect the response
 if scanning == true
 if Cfg.hardware.serial.oSerial.BytesAvailable
+    RT = GetSecs-r_ons;
     sbuttons = fscanf(Cfg.hardware.serial.oSerial); %
     sbuttons = strrep(sbuttons,'5','');
     
     if ~isempty(sbuttons)
-    myTrials(ExpTrial).RT = GetSecs - r_ons;
+    myTrials(ExpTrial).RT = RT ;
     myTrials(ExpTrial).response = sbuttons;
+%     disp(myTrials(ExpTrial).response)
+%     disp(myTrials(ExpTrial).RT)
     end
     
 end 
