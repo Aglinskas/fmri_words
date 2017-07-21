@@ -2,18 +2,17 @@ clear;close all;clc
 t_pracStart = GetSecs
 scanning  = false;
 commandwindow
-subID = 'July_10thth_S04p'
+subID = 'wS2'
 myTrials = func_myPracticeTrials(5,1);
 exp.pics_dir = './Pilot_pics/';
 exp.pics_fn_temp = 'Pilot_pics.0%s.jpeg'; %num2str(1,'%.2i')
-exp.ins_time = 3;
-exp.fixCross_time = 3;
+exp.ins_time = 4;
+exp.fixCross_time = 6;
 exp.stimTime = .5;
 exp.respTime = 2;
 
 key.keys = KbName('Keynames');
 key.spaceKey = find(strcmp(key.keys,'space'));
-key.spaceKey = [key.spaceKey 27] % hax for esc key
 % key.respkeys1234 = [find(strcmp(key.keys,'1!'))
 % find(strcmp(key.keys,'2@'))
 % find(strcmp(key.keys,'3#'))
@@ -68,12 +67,6 @@ keyIsDown = 0;
 while ~keyIsDown
 [keyIsDown, secs, keyCode, deltaSecs] = KbCheck;
 end %ends key wait
-
-if find(keyCode) == 27
-    sca
-    break
-end
-
 WaitSecs(.5)
 end %ends intro slides
 
@@ -191,8 +184,7 @@ myTrials = func_myPracticeTrials(5,2)
 
 KbWait
 RestrictKeysForKbCheck(key.respkeys1234)
-%for test_block = unique([myTrials.blockNum]);
- for test_block = Shuffle([randi(10,1,3) 11]);   
+for test_block = unique([myTrials.blockNum]);
     ttrial.test_block_ind = test_block%test_block;
     ttrial.mt_inds = find([myTrials.blockNum] == ttrial.test_block_ind);
     

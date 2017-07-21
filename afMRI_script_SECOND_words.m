@@ -120,25 +120,25 @@ WaitSecs(StimTime);
 %Screen('DrawLines', window, allCoords,lineWidthPix, white, [xCenter e4 - 220]); % fix cross after face
 DrawFormattedText(window, '+', 'center','center', white);
 Screen('Flip', window); % fix cross on screen waiting for response
+r_ons = GetSecs;
 while GetSecs<time_to_respond+t_presented + 0.5
 %% scanner button reposne
 % in a while loop when you want to collect the response
 if scanning == true
 if Cfg.hardware.serial.oSerial.BytesAvailable
-    sbuttons = str2num(fscanf(Cfg.hardware.serial.oSerial)); %
-    if pressed==0
-        switch sbuttons
-            case {1, 2, 3, 4}
-RT = GetSecs-t_presented;
-                pressed = 1;
-                response = sbuttons;
-                 myTrials(ExpTrial).resp=response;
-        myTrials(ExpTrial).RT=RT;
-        end
-       
+    RT = GetSecs-r_ons;
+    sbuttons = fscanf(Cfg.hardware.serial.oSerial); %
+    sbuttons = strrep(sbuttons,'5','');
+    
+    if ~isempty(sbuttons)
+    myTrials(ExpTrial).RT = RT ;
+    myTrials(ExpTrial).response = sbuttons;
+%     disp(myTrials(ExpTrial).response)
+%     disp(myTrials(ExpTrial).RT)
     end
+    
 end 
-end % ends 'if scanning'
+end % ends 'if scanning loop'
 if scanning == false
         [a, RT,key] = KbCheck;
         if a == 1;
